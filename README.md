@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ResQLink - Premium Emergency Contact System
 
 **ResQLink** is a high-fidelity, full-stack safety application designed to provide instant assistance during emergencies. Built with a focus on tactical efficiency and a premium visual experience, it empowers users to manage emergency contacts, trigger SOS alerts, and access official emergency channels seamlessly.
@@ -68,3 +69,7 @@ The application will be accessible at: **[http://localhost:5000](http://localhos
 ---
 *Designed for safety. Engineered for speed. Built for you.*
 
+=======
+# ResQLink
+Emergency response and SOS coordination platform built for faster crisis communication
+>>>>>>> f99fb2f8d3e309c2d297f4d2a9af35574e9f9252
