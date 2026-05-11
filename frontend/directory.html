@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ResQLink | Directory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#af101a",
+                        "surface": "#fff8f7",
+                        "on-surface": "#271816",
+                        "on-surface-variant": "#5b403d"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --mesh-color-1: #af101a05;
+            --mesh-color-2: #ffffff;
+        }
+        body {
+            background-color: var(--mesh-color-2);
+            background-image: 
+                radial-gradient(at 0% 0%, var(--mesh-color-1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, #af101a08 0, transparent 50%), 
+                radial-gradient(at 100% 0%, var(--mesh-color-1) 0, transparent 50%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        /* Serious Tactical Background */
+        .bg-3d-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-3d-primitive {
+            position: absolute;
+            opacity: 0.05;
+            animation: float-tactical 25s infinite linear;
+        }
+        .sphere-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle at 30% 30%, #af101a, transparent 70%);
+            top: -150px; left: -150px;
+            filter: blur(80px);
+        }
+        .sphere-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle at 30% 30%, #af101a, transparent 70%);
+            bottom: -50px; right: -50px;
+            filter: blur(60px);
+            animation-delay: -5s;
+        }
+        /* Tactical Glass Panes */
+        .tactical-pane {
+            width: 200px; height: 300px;
+            background: rgba(175, 16, 26, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(175, 16, 26, 0.08);
+            border-radius: 20px;
+            transform: perspective(1000px) rotateX(20deg) rotateY(-20deg);
+            position: absolute;
+            animation: float-3d-pane 20s infinite ease-in-out;
+        }
+        .pane-1 { top: 20%; right: 5%; }
+        .pane-2 { bottom: 20%; left: 10%; animation-delay: -10s; }
+
+        @keyframes float-tactical {
+            from { transform: rotate(0deg) translate(20px, 0) rotate(0deg); }
+            to { transform: rotate(360deg) translate(20px, 0) rotate(-360deg); }
+        }
+        @keyframes float-3d-pane {
+            0%, 100% { transform: perspective(1000px) rotateX(20deg) rotateY(-20deg) translateY(0); }
+            50% { transform: perspective(1000px) rotateX(25deg) rotateY(-15deg) translateY(-30px); }
+        }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            font-weight: normal; font-style: normal; font-size: 24px; line-height: 1; letter-spacing: normal;
+            text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal;
+            direction: ltr; -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(175, 16, 26, 0.05);
+        }
+        .directory-card { 
+            display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; overflow: hidden; justify-content: space-between;
+        }
+        .directory-card:hover { 
+            transform: translateY(-8px) scale(1.02);
+            background: white; 
+            border-color: rgba(175, 16, 26, 0.1);
+        }
+        .directory-card::before {
+            content: ''; position: absolute; inset: 0; 
+            background: radial-gradient(circle at center, var(--glow-color, #af101a08) 0%, transparent 70%);
+            opacity: 0; transition: opacity 0.5s ease; z-index: 0;
+        }
+        .directory-card:hover::before { opacity: 1; }
+        
+        .icon-box {
+            width: 64px; height: 64px; min-width: 64px; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative; flex-shrink: 0; z-index: 1;
+            box-shadow: 0 8px 16px -4px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+        }
+        .directory-card:hover .icon-box {
+            transform: rotate(-5deg) scale(1.1);
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.2);
+        }
+        .icon-box span { font-size: 36px !important; color: white !important; }
+        
+        .card-content { z-index: 1; position: relative; }
+        
+        .call-indicator {
+            position: absolute; bottom: 2rem; right: 2rem;
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+            opacity: 0; transform: scale(0.5); transition: all 0.4s ease;
+        }
+        .directory-card:hover .call-indicator { opacity: 1; transform: scale(1); background: var(--theme-color, #af101a); color: white; }
+
+        .premium-badge {
+            background: linear-gradient(135deg, #af101a 0%, #ff4d4d 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="font-inter text-on-surface min-h-screen">
+    <div class="bg-3d-wrap">
+        <div class="bg-3d-primitive sphere-1"></div>
+        <div class="bg-3d-primitive sphere-2"></div>
+        <div class="tactical-pane pane-1"></div>
+        <div class="tactical-pane pane-2"></div>
+    </div>
+    <header class="h-20 flex items-center px-8 glass-header shadow-sm sticky top-0 z-40">
+        <!-- Logo (Left) -->
+        <div class="flex-1">
+            <div class="text-2xl font-black tracking-tighter text-primary cursor-pointer active:scale-95 transition-transform inline-block" onclick="window.location.href='dashboard.html'">ResQLink</div>
+        </div>
+
+        <!-- Navigation (Center) -->
+        <nav class="hidden md:flex gap-8 items-center h-full">
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="dashboard.html">Dashboard</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="family.html">Family</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="contacts.html">Contacts</a>
+            <a class="text-primary font-black border-b-2 border-primary pb-1 tracking-tight cursor-pointer text-sm font-black" href="directory.html">Directory</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="messages.html">Messages</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="history.html">History</a>
+        </nav>
+
+        <!-- Actions (Right) -->
+        <div class="flex-1 flex justify-end items-center gap-4">
+            <button onclick="logout()" class="p-2 text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined">logout</span></button>
+            <div onclick="window.location.href='profile.html'" class="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-100 cursor-pointer shadow-sm hover:border-primary transition-all">
+                <img src="https://ui-avatars.com/api/?name=User&background=0f172a&color=af101a&bold=true" id="navAvatar" alt="Profile"/>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-16 px-6 max-w-6xl mx-auto">
+        <div class="mb-16">
+            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-4 block">Official Responders</span>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tighter mb-6">Emergency <span class="premium-badge">Directory</span></h1>
+            <p class="text-on-surface-variant font-medium text-lg max-w-2xl leading-relaxed">Direct official channels provided by the Government of India. Optimized for instant connectivity when every second counts.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 112 -->
+            <a href="tel:112" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #af101a; --glow-color: rgba(175, 16, 26, 0.1);">
+                <div class="icon-box bg-primary text-white">
+                    <span class="material-symbols-outlined">emergency</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">112</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-primary">All-In-One Universal</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">National emergency number for police, fire, and medical help across India.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+
+            <!-- 100 -->
+            <a href="tel:100" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #0f172a; --glow-color: rgba(15, 23, 42, 0.1);">
+                <div class="icon-box bg-slate-900 text-white">
+                    <span class="material-symbols-outlined">local_police</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">100</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Police Department</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">Direct line to local law enforcement for immediate safety interventions.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+
+            <!-- 101 -->
+            <a href="tel:101" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #ea580c; --glow-color: rgba(234, 88, 12, 0.1);">
+                <div class="icon-box bg-orange-600 text-white">
+                    <span class="material-symbols-outlined">fire_truck</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">101</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-orange-600">Fire Services</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">Critical response for fire-related emergencies and structural hazards.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+
+            <!-- 102 -->
+            <a href="tel:102" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #2563eb; --glow-color: rgba(37, 99, 235, 0.1);">
+                <div class="icon-box bg-blue-600 text-white">
+                    <span class="material-symbols-outlined">ambulance</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">102</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-blue-600">Medical Services</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">Emergency medical transport and immediate paramedic assistance.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+
+            <!-- 1091 -->
+            <a href="tel:1091" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #9333ea; --glow-color: rgba(147, 51, 234, 0.1);">
+                <div class="icon-box bg-purple-600 text-white">
+                    <span class="material-symbols-outlined">woman</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">1091</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-purple-600">Women Protection</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">Specialized security and legal support for women in distress or danger.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+
+            <!-- 1098 -->
+            <a href="tel:1098" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #ca8a04; --glow-color: rgba(202, 138, 4, 0.1);">
+                <div class="icon-box bg-yellow-500 text-white">
+                    <span class="material-symbols-outlined">child_care</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">1098</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-yellow-600">Child Helpline</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">24/7 national emergency outreach for children needing protection.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+
+            <!-- 108 -->
+            <a href="tel:108" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #16a34a; --glow-color: rgba(22, 163, 74, 0.1);">
+                <div class="icon-box bg-green-600 text-white">
+                    <span class="material-symbols-outlined">disaster</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">108</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-green-600">Disaster MGMT</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">State-level coordination for large scale disasters and accidents.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+
+            <!-- 14567 -->
+            <a href="tel:14567" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #047857; --glow-color: rgba(4, 120, 87, 0.1);">
+                <div class="icon-box bg-emerald-700 text-white">
+                    <span class="material-symbols-outlined">elderly</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">14567</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-emerald-700">Senior Support</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">Support and security help specifically for elder members of society.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+
+            <!-- 1075 -->
+            <a href="tel:1075" class="directory-card p-10 rounded-[2.5rem] gap-6 w-full min-h-[320px]" style="--theme-color: #0ea5e9; --glow-color: rgba(14, 165, 233, 0.1);">
+                <div class="icon-box bg-sky-500 text-white">
+                    <span class="material-symbols-outlined">health_and_safety</span>
+                </div>
+                <div class="card-content flex flex-col gap-2">
+                    <h3 class="text-3xl font-black tracking-tight">1075</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-sky-500">Medical Query</p>
+                    <p class="text-base font-medium text-on-surface-variant leading-relaxed mt-4 opacity-80">National health query portal and medical guidance services.</p>
+                </div>
+                <div class="call-indicator"><span class="material-symbols-outlined text-sm">call</span></div>
+            </a>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script src="immersive.js"></script>
+    <script>
+        const username = localStorage.getItem('username');
+        if (username) {
+            document.getElementById('navAvatar').src = `https://ui-avatars.com/api/?name=${username}&background=0f172a&color=af101a&bold=true`;
+        }
+    </script>
+</body>
+</html>

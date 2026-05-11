@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ResQLink | Family Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#af101a",
+                        "surface": "#fff8f7",
+                        "on-surface": "#271816"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fff; position: relative; overflow-x: hidden; }
+        .bg-3d-wrap { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .glass-header { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(175, 16, 26, 0.05); }
+        .premium-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.02); }
+        .premium-badge { background: linear-gradient(135deg, #af101a 0%, #ff4d4d 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .invite-code-pill { background: #fdf2f2; border: 2px dashed #af101a33; }
+    </style>
+</head>
+<body class="text-on-surface">
+    <div class="bg-3d-wrap"></div>
+    
+    <header class="h-20 flex items-center px-8 glass-header sticky top-0 z-40">
+        <div class="flex-1">
+            <div class="text-2xl font-black tracking-tighter text-primary cursor-pointer active:scale-95 transition-transform inline-block" onclick="window.location.href='dashboard.html'">ResQLink</div>
+        </div>
+        <nav class="hidden md:flex gap-8 items-center h-full">
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight text-sm" href="dashboard.html">Dashboard</a>
+            <a class="text-primary font-black border-b-2 border-primary pb-1 tracking-tight text-sm" href="family.html">Family</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight text-sm" href="contacts.html">Contacts</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight text-sm" href="directory.html">Directory</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight text-sm" href="messages.html">Messages</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight text-sm" href="history.html">History</a>
+        </nav>
+        <div class="flex-1 flex justify-end items-center gap-4">
+            <button onclick="logout()" class="p-2 text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined">logout</span></button>
+            <div onclick="window.location.href='profile.html'" class="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-100 cursor-pointer hover:border-primary transition-all">
+                <img src="https://ui-avatars.com/api/?name=User&background=0f172a&color=af101a&bold=true" id="navAvatar"/>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12">
+        <header class="text-center mb-16">
+            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary block mb-3">Secure Nodes</span>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tighter mb-4 italic">Family <span class="not-italic text-primary">Safety</span> Network</h1>
+            <p class="text-slate-500 font-medium text-sm max-w-md mx-auto leading-relaxed">Encrypted real-time synchronization with your closest circle.</p>
+        </header>
+
+        <!-- No Family State -->
+        <div id="noFamilyState" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="premium-card p-10 rounded-[3rem] text-center space-y-6">
+                <div class="w-20 h-20 bg-primary/5 text-primary rounded-3xl flex items-center justify-center mx-auto">
+                    <span class="material-symbols-outlined text-4xl">add_moderator</span>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black tracking-tight mb-2">Initialize Network</h3>
+                    <p class="text-xs text-slate-400 font-medium leading-relaxed">Establish a new private safety loop as the Family Head.</p>
+                </div>
+                <div class="pt-4">
+                    <input id="newFamilyName" type="text" placeholder="Network Name (e.g. Smith Family)" class="w-full bg-slate-50 border-0 rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 mb-4"/>
+                    <button onclick="createFamily()" class="w-full py-4 bg-primary text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20">Create Family</button>
+                </div>
+            </div>
+
+            <div class="premium-card p-10 rounded-[3rem] text-center space-y-6">
+                <div class="w-20 h-20 bg-slate-50 text-slate-400 rounded-3xl flex items-center justify-center mx-auto">
+                    <span class="material-symbols-outlined text-4xl">group_add</span>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black tracking-tight mb-2">Sync with Node</h3>
+                    <p class="text-xs text-slate-400 font-medium leading-relaxed">Join an existing family network using a tactical invite code.</p>
+                </div>
+                <div class="pt-4">
+                    <input id="inviteCode" type="text" placeholder="Invite Code (e.g. AB1234)" class="w-full bg-slate-50 border-0 rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 mb-4 uppercase"/>
+                    <button onclick="joinFamily()" class="w-full py-4 bg-on-surface text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all">Join Network</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Family State -->
+        <div id="activeFamilyState" class="hidden space-y-8">
+            <div class="premium-card rounded-[3rem] p-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div>
+                    <h2 id="familyName" class="text-4xl font-black tracking-tighter mb-2 italic">Family Name</h2>
+                    <p class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">Tactical Loop Active</p>
+                </div>
+                <div class="invite-code-pill px-8 py-5 rounded-2xl text-center">
+                    <p class="text-[9px] font-black uppercase tracking-widest text-primary mb-1">Invite Code</p>
+                    <p id="displayInviteCode" class="text-2xl font-black tracking-widest text-on-surface">------</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Members List -->
+                <div class="lg:col-span-2 premium-card rounded-[3rem] p-10">
+                    <div class="flex justify-between items-center mb-10">
+                        <h3 class="text-xl font-black tracking-tight">Active Nodes</h3>
+                        <span id="memberCount" class="px-4 py-1.5 bg-primary/5 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">0 Members</span>
+                    </div>
+                    <div id="membersList" class="space-y-4">
+                        <!-- Members via JS -->
+                    </div>
+                </div>
+
+                <!-- Settings/Actions -->
+                <div class="premium-card rounded-[3rem] p-10 space-y-8">
+                    <h3 class="text-xl font-black tracking-tight">Node Settings</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest">Loc-Share</p>
+                                <p id="shareStatus" class="text-xs font-bold text-green-600">Always Active</p>
+                            </div>
+                            <button onclick="toggleSharing()" id="toggleBtn" class="w-12 h-6 bg-green-500 rounded-full relative transition-all">
+                                <span class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></span>
+                            </button>
+                        </div>
+                        <button onclick="leaveFamily()" id="leaveBtn" class="w-full py-4 border-2 border-slate-100 rounded-2xl font-black text-[10px] uppercase tracking-widest text-slate-400 hover:border-primary hover:text-primary transition-all">Leave Network</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script src="immersive.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', loadFamily);
+
+        async function loadFamily() {
+            const res = await apiCall('/family/members');
+            if (res.message === 'No family found') {
+                document.getElementById('noFamilyState').classList.remove('hidden');
+                return;
+            }
+
+            const currentUserId = localStorage.getItem('userId');
+            document.getElementById('activeFamilyState').classList.remove('hidden');
+            document.getElementById('familyName').innerText = res.name;
+            document.getElementById('displayInviteCode').innerText = res.inviteCode;
+            document.getElementById('memberCount').innerText = `${res.members.length} Members`;
+
+            const list = document.getElementById('membersList');
+            list.innerHTML = '';
+
+            res.members.forEach(m => {
+                const isHead = m._id === res.head;
+                const isMe = m._id === currentUserId;
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-6 bg-white/50 border border-slate-50 rounded-[2rem] hover:border-primary/20 transition-all';
+                div.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
+                            <img src="https://ui-avatars.com/api/?name=${m.fullName}&background=0f172a&color=af101a&bold=true"/>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-black text-sm tracking-tight">${m.fullName} ${isMe ? '(You)' : ''}</h4>
+                                ${isHead ? '<span class="px-2 py-0.5 bg-amber-50 text-amber-600 text-[8px] font-black rounded uppercase tracking-widest border border-amber-100 italic">Head</span>' : ''}
+                            </div>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-300">Node Sync Active</p>
+                        </div>
+                    </div>
+                    ${(currentUserId === res.head && !isMe) ? `<button onclick="removeMember('${m._id}')" class="text-slate-200 hover:text-primary transition-colors"><span class="material-symbols-outlined">person_remove</span></button>` : ''}
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        async function createFamily() {
+            const name = document.getElementById('newFamilyName').value.trim();
+            if (!name) return alert('Enter family name');
+            const res = await apiCall('/family/create', 'POST', { name });
+            if (res._id) {
+                location.reload();
+            } else {
+                alert(res.message || 'Error creating family');
+            }
+        }
+
+        async function joinFamily() {
+            const inviteCode = document.getElementById('inviteCode').value.trim().toUpperCase();
+            if (!inviteCode) return alert('Enter invite code');
+            const res = await apiCall('/family/join', 'POST', { inviteCode });
+            if (res._id) {
+                location.reload();
+            } else {
+                alert(res.message || 'Invalid invite code');
+            }
+        }
+
+        async function removeMember(userIdToRemove) {
+            if (!confirm('Disconnect this node from the family loop?')) return;
+            const res = await apiCall('/family/remove-member', 'POST', { userIdToRemove });
+            if (res.message === 'Member removed') location.reload();
+        }
+
+        async function leaveFamily() {
+            if (!confirm('Disconnect from the family loop?')) return;
+            const res = await apiCall('/family/leave', 'POST');
+            if (res.message === 'Left family') location.reload();
+            else alert(res.message);
+        }
+
+        let isSharing = true;
+        async function toggleSharing() {
+            isSharing = !isSharing;
+            const btn = document.getElementById('toggleBtn');
+            const status = document.getElementById('shareStatus');
+            btn.className = `w-12 h-6 ${isSharing ? 'bg-green-500' : 'bg-slate-200'} rounded-full relative transition-all`;
+            btn.innerHTML = `<span class="absolute ${isSharing ? 'right-1' : 'left-1'} top-1 w-4 h-4 bg-white rounded-full transition-all"></span>`;
+            status.innerText = isSharing ? 'Always Active' : 'Loop Offline';
+            status.className = `text-xs font-bold ${isSharing ? 'text-green-600' : 'text-slate-400'}`;
+            
+            await apiCall('/location/toggle', 'POST', { isSharing });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ResQLink | Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#af101a",
+                        "surface": "#fff8f7",
+                        "on-surface": "#271816"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --mesh-color-1: #af101a05;
+            --mesh-color-2: #ffffff;
+        }
+        body {
+            background-color: var(--mesh-color-2);
+            background-image: 
+                radial-gradient(at 0% 0%, var(--mesh-color-1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, #af101a08 0, transparent 50%), 
+                radial-gradient(at 100% 0%, var(--mesh-color-1) 0, transparent 50%);
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Serious Tactical Background */
+        .bg-3d-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-3d-primitive {
+            position: absolute;
+            opacity: 0.05;
+            animation: float-tactical 25s infinite linear;
+        }
+        .sphere-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle at 30% 30%, #af101a, transparent 70%);
+            top: -150px; left: -150px;
+            filter: blur(80px);
+        }
+        .sphere-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle at 30% 30%, #af101a, transparent 70%);
+            bottom: -50px; right: -50px;
+            filter: blur(60px);
+            animation-delay: -5s;
+        }
+        /* Tactical Glass Panes */
+        .tactical-pane {
+            width: 200px; height: 300px;
+            background: rgba(175, 16, 26, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(175, 16, 26, 0.08);
+            border-radius: 20px;
+            transform: perspective(1000px) rotateX(20deg) rotateY(-20deg);
+            position: absolute;
+            animation: float-3d-pane 20s infinite ease-in-out;
+        }
+        .pane-1 { top: 20%; right: 5%; }
+        .pane-2 { bottom: 20%; left: 10%; animation-delay: -10s; }
+
+        @keyframes float-tactical {
+            from { transform: rotate(0deg) translate(20px, 0) rotate(0deg); }
+            to { transform: rotate(360deg) translate(20px, 0) rotate(-360deg); }
+        }
+        @keyframes float-3d-pane {
+            0%, 100% { transform: perspective(1000px) rotateX(20deg) rotateY(-20deg) translateY(0); }
+            50% { transform: perspective(1000px) rotateX(25deg) rotateY(-15deg) translateY(-30px); }
+        }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            font-weight: normal; font-style: normal; font-size: 24px; line-height: 1; letter-spacing: normal;
+            text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal;
+            direction: ltr; -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(175, 16, 26, 0.05);
+        }
+        .premium-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .chip { padding: 6px 16px; border-radius: 12px; font-size: 10px; font-weight: 800; background: #f1f5f9; color: #475569; display: inline-block; margin-right: 6px; margin-bottom: 6px; text-transform: uppercase; tracking-widest: 0.1em; border: 1px solid rgba(0,0,0,0.02); }
+        .blood-badge { background: linear-gradient(135deg, #af101a 0%, #8b0d15 100%); color: white; padding: 6px 16px; border-radius: 12px; font-weight: 900; font-size: 14px; box-shadow: 0 8px 16px -4px rgba(175, 16, 26, 0.3); }
+        .premium-badge {
+            background: linear-gradient(135deg, #af101a 0%, #ff4d4d 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 16px 32px; border-radius: 20px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2); font-weight: 800; font-size: 12px; text-transform: uppercase; tracking-widest: 0.2em; z-index: 1000; display: flex; align-items: center; gap: 12px; }
+    </style>
+</head>
+<body class="text-on-surface min-h-screen">
+    <div class="bg-3d-wrap">
+        <div class="bg-3d-primitive sphere-1"></div>
+        <div class="bg-3d-primitive sphere-2"></div>
+        <div class="tactical-pane pane-1"></div>
+        <div class="tactical-pane pane-2"></div>
+    </div>
+    <header class="h-20 flex items-center px-8 glass-header shadow-sm sticky top-0 z-40">
+        <!-- Logo (Left) -->
+        <div class="flex-1">
+            <div class="text-2xl font-black tracking-tighter text-primary cursor-pointer active:scale-95 transition-transform inline-block" onclick="window.location.href='dashboard.html'">ResQLink</div>
+        </div>
+
+        <!-- Navigation (Center) -->
+        <nav class="hidden md:flex gap-8 items-center h-full">
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="dashboard.html">Dashboard</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="family.html">Family</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="contacts.html">Contacts</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="directory.html">Directory</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="messages.html">Messages</a>
+            <a class="text-on-surface font-bold hover:text-primary transition-colors tracking-tight cursor-pointer text-sm" href="history.html">History</a>
+        </nav>
+
+        <!-- Actions (Right) -->
+        <div class="flex-1 flex justify-end items-center gap-4">
+            <button onclick="logout()" class="p-2 text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined">logout</span></button>
+        </div>
+    </header>
+
+    <main class="py-16 px-6 max-w-4xl mx-auto">
+        <!-- Profile Identity Header -->
+        <div class="flex flex-col items-center mb-16 text-center">
+            <div id="initialsAvatar" class="w-36 h-36 rounded-[2.5rem] bg-slate-900 border-4 border-white shadow-2xl flex items-center justify-center text-5xl font-black text-white mb-8 animate-in zoom-in duration-700 overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary via-slate-900 to-black opacity-90"></div>
+                <span class="relative z-10" id="avatarText">--</span>
+            </div>
+            <h1 id="headerFullName" class="text-5xl font-black tracking-tighter mb-2">--</h1>
+            <p id="headerUsername" class="text-slate-400 font-black uppercase tracking-[0.3em] text-[10px] opacity-70">Node: @--</p>
+        </div>
+
+        <!-- Master Card -->
+        <div class="premium-card rounded-[3.5rem] p-10 md:p-16 shadow-2xl shadow-slate-200/50">
+            
+            <!-- View Logic -->
+            <div id="viewMode" class="animate-in fade-in duration-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-12 mb-16">
+                    <div class="space-y-3">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Name</span>
+                        <p id="viewFullName" class="font-black text-xl tracking-tight">--</p>
+                    </div>
+                    <div class="space-y-3">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Phone Number</span>
+                        <p id="viewPhone" class="font-black text-xl tracking-tight">--</p>
+                    </div>
+                    <div class="space-y-3 md:col-span-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Blood Group</span>
+                        <div class="pt-2 flex items-center gap-4">
+                            <span id="viewBloodGroup" class="blood-badge">--</span>
+                            <span class="text-xs font-bold text-slate-400">Emergency Blood Group Verification</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 md:col-span-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Address</span>
+                        <p id="viewAddress" class="font-bold text-lg leading-relaxed text-slate-700">--</p>
+                    </div>
+                    <div class="space-y-3 md:col-span-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Medical Conditions</span>
+                        <div id="medicalChips" class="pt-3 flex flex-wrap">--</div>
+                    </div>
+                </div>
+                <div class="border-t border-slate-50 pt-10 flex justify-center">
+                    <button onclick="enterEditMode()" class="px-12 py-5 rounded-2xl bg-on-surface text-white font-black hover:bg-black active:scale-95 transition-all text-xs uppercase tracking-widest shadow-xl shadow-slate-200">Modify Node Profile</button>
+                </div>
+            </div>
+
+            <!-- Edit Logic -->
+            <form id="editMode" class="hidden space-y-10 animate-in slide-in-from-bottom-4 duration-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-3 md:col-span-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Portal Handle (Non-Mutable)</label>
+                        <input id="editUsername" disabled class="w-full px-6 py-5 bg-slate-50 text-slate-400 rounded-2xl border-0 font-black" type="text"/>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Full Identity</label>
+                        <input id="editFullName" required class="w-full px-6 py-5 bg-slate-50 rounded-2xl border-0 focus:ring-2 focus:ring-primary/20 font-bold transition-all" type="text"/>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
+                        <input id="editPhone" required class="w-full px-6 py-5 bg-slate-50 rounded-2xl border-0 focus:ring-2 focus:ring-primary/20 font-bold transition-all" type="tel"/>
+                    </div>
+                    <div class="space-y-3 md:col-span-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Blood Type</label>
+                        <select id="editBloodGroup" required class="w-full px-6 py-5 bg-slate-50 rounded-2xl border-0 focus:ring-2 focus:ring-primary/20 font-bold transition-all">
+                            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                            <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+                        </select>
+                    </div>
+                    <div class="space-y-3 md:col-span-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Detailed Address</label>
+                        <textarea id="editAddress" required class="w-full px-6 py-5 bg-slate-50 rounded-2xl border-0 focus:ring-2 focus:ring-primary/20 font-bold h-32 transition-all"></textarea>
+                    </div>
+                    <div class="space-y-3 md:col-span-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Medical Flags (Comma separated)</label>
+                        <textarea id="editMedicalConditions" class="w-full px-6 py-5 bg-slate-50 rounded-2xl border-0 focus:ring-2 focus:ring-primary/20 font-bold h-32 transition-all" placeholder="e.g. Asthma, Penicillin Allergy"></textarea>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 pt-4">
+                    <button type="submit" class="flex-1 py-5 bg-primary text-white font-black rounded-2xl shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform text-xs uppercase tracking-widest">Update Portal Data</button>
+                    <button type="button" onclick="exitEditMode()" class="flex-1 py-5 border-2 border-slate-100 text-slate-400 font-bold rounded-2xl hover:bg-slate-50 transition-colors text-xs uppercase tracking-widest">Revert Changes</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div id="toast" class="hidden animate-in slide-in-from-bottom-8 duration-500">
+        <div class="toast">
+            <span class="material-symbols-outlined text-green-500">check_circle</span>
+            Node synchronized successfully
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="immersive.js"></script>
+    <script>
+        const username = localStorage.getItem('username');
+        let currentUserData = null;
+
+        async function init() {
+            if (!username) return window.location.href = 'login.html';
+            await loadProfile();
+        }
+
+        async function loadProfile() {
+            const user = await apiCall(`/auth/profile/${username}`);
+            if (!user || user.message) {
+                alert("Session invalid.");
+                return logout();
+            }
+            
+            currentUserData = user;
+            
+            document.getElementById('headerFullName').innerText = user.fullName || 'User Node';
+            document.getElementById('headerUsername').innerText = `Node: @${user.username}`;
+            
+            const initials = user.fullName ? user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : '??';
+            document.getElementById('avatarText').innerText = initials;
+
+            document.getElementById('viewFullName').innerText = user.fullName || 'N/A';
+            document.getElementById('viewPhone').innerText = user.phone || 'N/A';
+            document.getElementById('viewBloodGroup').innerText = user.bloodGroup || '??';
+            document.getElementById('viewAddress').innerText = user.address || 'Not specified';
+            
+            const chipsContainer = document.getElementById('medicalChips');
+            chipsContainer.innerHTML = '';
+            const conditions = user.medicalConditions ? user.medicalConditions.split(',') : ['No declared conditions'];
+            conditions.forEach(c => {
+                if (c.trim()) {
+                    const span = document.createElement('span');
+                    span.className = 'chip';
+                    span.innerText = c.trim();
+                    chipsContainer.appendChild(span);
+                }
+            });
+
+            document.getElementById('editUsername').value = user.username;
+            document.getElementById('editFullName').value = user.fullName || '';
+            document.getElementById('editPhone').value = user.phone || '';
+            document.getElementById('editBloodGroup').value = user.bloodGroup || 'A+';
+            document.getElementById('editAddress').value = user.address || '';
+            document.getElementById('editMedicalConditions').value = user.medicalConditions || '';
+        }
+
+        function enterEditMode() {
+            document.getElementById('viewMode').classList.add('hidden');
+            document.getElementById('editMode').classList.remove('hidden');
+        }
+
+        function exitEditMode() {
+            document.getElementById('editMode').classList.add('hidden');
+            document.getElementById('viewMode').classList.remove('hidden');
+        }
+
+        document.getElementById('editMode').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                fullName: document.getElementById('editFullName').value,
+                phone: document.getElementById('editPhone').value,
+                bloodGroup: document.getElementById('editBloodGroup').value,
+                address: document.getElementById('editAddress').value,
+                medicalConditions: document.getElementById('editMedicalConditions').value
+            };
+
+            await apiCall(`/auth/profile/${username}`, 'PUT', data);
+            showToast();
+            await loadProfile();
+            setTimeout(exitEditMode, 800);
+        });
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.remove('hidden');
+            t.classList.add('flex');
+            setTimeout(() => {
+                t.classList.add('hidden');
+                t.classList.remove('flex');
+            }, 3000);
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ResQLink | Node Enrollment</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#af101a",
+                        "surface": "#fff8f7",
+                        "on-surface": "#271816",
+                        "on-surface-variant": "#5b403d"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --mesh-color-1: #af101a05;
+            --mesh-color-2: #ffffff;
+        }
+        body {
+            background-color: var(--mesh-color-2);
+            background-image: 
+                radial-gradient(at 0% 0%, var(--mesh-color-1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, #af101a08 0, transparent 50%), 
+                radial-gradient(at 100% 0%, var(--mesh-color-1) 0, transparent 50%);
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+            color: #271816;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Serious Tactical Background */
+        .bg-3d-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-3d-primitive {
+            position: absolute;
+            opacity: 0.05;
+            animation: float-tactical 25s infinite linear;
+        }
+        .sphere-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle at 30% 30%, #af101a, transparent 70%);
+            top: -150px; left: -150px;
+            filter: blur(80px);
+        }
+        .sphere-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle at 30% 30%, #af101a, transparent 70%);
+            bottom: -50px; right: -50px;
+            filter: blur(60px);
+            animation-delay: -5s;
+        }
+        /* Tactical Glass Panes */
+        .tactical-pane {
+            width: 200px; height: 300px;
+            background: rgba(175, 16, 26, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(175, 16, 26, 0.08);
+            border-radius: 20px;
+            transform: perspective(1000px) rotateX(20deg) rotateY(-20deg);
+            position: absolute;
+            animation: float-3d-pane 20s infinite ease-in-out;
+        }
+        .pane-1 { top: 20%; right: 5%; }
+        .pane-2 { bottom: 20%; left: 10%; animation-delay: -10s; }
+
+        @keyframes float-tactical {
+            from { transform: rotate(0deg) translate(20px, 0) rotate(0deg); }
+            to { transform: rotate(360deg) translate(20px, 0) rotate(-360deg); }
+        }
+        @keyframes float-3d-pane {
+            0%, 100% { transform: perspective(1000px) rotateX(20deg) rotateY(-20deg) translateY(0); }
+            50% { transform: perspective(1000px) rotateX(25deg) rotateY(-15deg) translateY(-30px); }
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(175, 16, 26, 0.05);
+        }
+        .premium-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.02);
+            border-radius: 2.5rem;
+        }
+        .input-pill {
+            background: #fdf2f2;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .input-pill:focus-within {
+            border-color: #af101a;
+            background: #ffffff;
+        }
+        .btn-primary {
+            background: radial-gradient(circle at center, #af101a 0%, #8b0d15 100%);
+            color: #ffffff;
+            box-shadow: 0 20px 40px -10px rgba(175, 16, 26, 0.3);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px -10px rgba(175, 16, 26, 0.4);
+        }
+    </style>
+</head>
+<body class="selection:bg-primary/10">
+    <div class="bg-3d-wrap">
+        <div class="bg-3d-primitive sphere-1"></div>
+        <div class="bg-3d-primitive sphere-2"></div>
+        <div class="tactical-pane pane-1"></div>
+        <div class="tactical-pane pane-2"></div>
+    </div>
+
+    <header class="h-20 flex items-center px-8 glass-header sticky top-0 z-50">
+        <div class="flex-1">
+            <div class="text-2xl font-black tracking-tighter text-primary cursor-pointer active:scale-95 transition-transform inline-block" onclick="window.location.href='index.html'">ResQLink</div>
+        </div>
+        <div class="flex-1 flex justify-end items-center gap-4">
+            <a href="login.html" class="text-[9px] font-black uppercase tracking-widest text-primary hover:underline">Return to Terminal</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-16 lg:py-24">
+        <div class="max-w-3xl mx-auto">
+            <header class="text-center mb-16">
+                <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary block mb-3">Protocol Enrollment</span>
+                <h1 class="text-5xl md:text-6xl font-black tracking-tighter mb-4 italic">Initialize <span class="not-italic text-primary">Node</span></h1>
+                <p class="text-on-surface-variant font-medium text-sm leading-relaxed max-w-sm mx-auto opacity-60">Prepare your biometric and operational data for secure loop synchronization.</p>
+            </header>
+
+            <form id="registerForm" class="space-y-12">
+                <!-- Group 01 -->
+                <section class="premium-card p-10 space-y-8">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[9px] font-black text-primary uppercase tracking-[0.4em]">01 Authorization</span>
+                        <div class="flex-1 h-px bg-primary/5"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Username</label>
+                            <div class="input-pill flex items-center px-6 rounded-2xl h-14">
+                                <input id="username" required type="text" class="w-full bg-transparent border-0 ring-0 focus:ring-0 font-bold p-0 placeholder:text-primary/10 text-sm" placeholder="Username"/>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Password</label>
+                            <div class="input-pill flex items-center px-6 rounded-2xl h-14">
+                                <input id="password" required type="password" class="w-full bg-transparent border-0 ring-0 focus:ring-0 font-bold p-0 placeholder:text-primary/10 text-sm" placeholder="••••••••"/>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Group 02 -->
+                <section class="premium-card p-10 space-y-8">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[9px] font-black text-primary uppercase tracking-[0.4em]">02 Biological data</span>
+                        <div class="flex-1 h-px bg-primary/5"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Full Name</label>
+                            <div class="input-pill flex items-center px-6 rounded-2xl h-14">
+                                <input id="fullName" required type="text" class="w-full bg-transparent border-0 ring-0 focus:ring-0 font-bold p-0 placeholder:text-primary/10 text-sm" placeholder="Full name"/>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Phone Number</label>
+                            <div class="input-pill flex items-center px-6 rounded-2xl h-14">
+                                <input id="phone" required type="tel" class="w-full bg-transparent border-0 ring-0 focus:ring-0 font-bold p-0 placeholder:text-primary/10 text-sm" placeholder="+91 ..."/>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2 space-y-2">
+                            <label class="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Blood Group</label>
+                            <select id="bloodGroup" required class="w-full h-14 bg-[#fdf2f2] border-0 rounded-2xl px-6 font-bold focus:bg-white transition-all text-sm">
+                                <option value="">Select markers...</option>
+                                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Group 03 -->
+                <section class="premium-card p-10 space-y-8">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[9px] font-black text-primary uppercase tracking-[0.4em]">03 Other Data</span>
+                        <div class="flex-1 h-px bg-primary/5"></div>
+                    </div>
+                    <div class="space-y-8">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Permanent Address</label>
+                            <textarea id="address" required class="w-full bg-[#fdf2f2] border-0 rounded-2xl p-6 font-bold focus:bg-white transition-all h-24 text-sm" placeholder="Detailed deployment address..."></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Medical Conditions (Optional)</label>
+                            <textarea id="medicalConditions" class="w-full bg-[#fdf2f2] border-0 rounded-2xl p-6 font-bold focus:bg-white transition-all h-24 text-sm" placeholder="e.g. Chronic Asthma, Allergy: Penicillin"></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="pt-8 text-center">
+                    <button type="submit" id="regBtn" class="w-full h-16 btn-primary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] flex items-center justify-center gap-3">
+                        Register Node Profile
+                        <span class="material-symbols-outlined !text-[16px]">how_to_reg</span>
+                    </button>
+                    <p class="mt-8 text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-widest">
+                        Already Registered? <a href="login.html" class="text-primary font-black hover:underline underline-offset-4 ml-2">Operator Login</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-[#271816] py-12 text-white/30 text-center">
+        <div class="text-[9px] font-black uppercase tracking-[0.4em]">© 2026 ResQLink Tactical Systems. System Ratio: Synchronized.</div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="immersive.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('regBtn');
+            btn.disabled = true;
+            btn.innerText = 'SYNCHRONIZING...';
+
+            const payload = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                fullName: document.getElementById('fullName').value,
+                phone: document.getElementById('phone').value,
+                bloodGroup: document.getElementById('bloodGroup').value,
+                address: document.getElementById('address').value,
+                medicalConditions: document.getElementById('medicalConditions').value || 'None'
+            };
+
+            const res = await apiCall('/auth/register', 'POST', payload);
+            if (res.message === 'User registered successfully') {
+                alert('Node Profile Initialized! Please Login.');
+                window.location.href = 'login.html';
+            } else {
+                alert(res.message || 'Registration failed');
+                btn.disabled = false;
+                btn.innerHTML = `Register Node Profile <span class="material-symbols-outlined !text-[16px]">how_to_reg</span>`;
+            }
+        });
+    </script>
+</body>
+</html>

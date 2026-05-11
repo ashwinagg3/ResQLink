@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ResQLink | Secure Arrival</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#af101a",
+                        "surface": "#fff8f7",
+                        "on-surface": "#271816",
+                        "on-surface-variant": "#5b403d"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --mesh-color-1: #af101a05;
+            --mesh-color-2: #ffffff;
+        }
+        body {
+            background-color: var(--mesh-color-2);
+            background-image: 
+                radial-gradient(at 0% 0%, var(--mesh-color-1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, #af101a08 0, transparent 50%), 
+                radial-gradient(at 100% 0%, var(--mesh-color-1) 0, transparent 50%);
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+            color: #271816;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Serious Tactical Background */
+        .bg-3d-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-3d-primitive {
+            position: absolute;
+            opacity: 0.05;
+            animation: float-tactical 25s infinite linear;
+        }
+        .sphere-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle at 30% 30%, #af101a, transparent 70%);
+            top: -150px; left: -150px;
+            filter: blur(80px);
+        }
+        .sphere-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle at 30% 30%, #af101a, transparent 70%);
+            bottom: -50px; right: -50px;
+            filter: blur(60px);
+            animation-delay: -5s;
+        }
+        /* Tactical Glass Panes */
+        .tactical-pane {
+            width: 200px; height: 300px;
+            background: rgba(175, 16, 26, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(175, 16, 26, 0.08);
+            border-radius: 20px;
+            transform: perspective(1000px) rotateX(20deg) rotateY(-20deg);
+            position: absolute;
+            animation: float-3d-pane 20s infinite ease-in-out;
+        }
+        .pane-1 { top: 20%; right: 5%; }
+        .pane-2 { bottom: 20%; left: 10%; animation-delay: -10s; }
+
+        @keyframes float-tactical {
+            from { transform: rotate(0deg) translate(20px, 0) rotate(0deg); }
+            to { transform: rotate(360deg) translate(20px, 0) rotate(-360deg); }
+        }
+        @keyframes float-3d-pane {
+            0%, 100% { transform: perspective(1000px) rotateX(20deg) rotateY(-20deg) translateY(0); }
+            50% { transform: perspective(1000px) rotateX(25deg) rotateY(-15deg) translateY(-30px); }
+        }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            font-weight: normal; font-style: normal; font-size: 20px; line-height: 1; letter-spacing: normal;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(175, 16, 26, 0.05);
+        }
+        .premium-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.02);
+            border-radius: 2.5rem;
+        }
+        .login-card {
+            max-width: 480px;
+            width: 100%;
+            margin-left: auto;
+        }
+        .input-pill {
+            background: #fdf2f2;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .input-pill:focus-within {
+            border-color: #af101a;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(175, 16, 26, 0.04);
+        }
+        .btn-primary {
+            background: radial-gradient(circle at center, #af101a 0%, #8b0d15 100%);
+            color: #ffffff;
+            box-shadow: 0 20px 40px -10px rgba(175, 16, 26, 0.3);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px -10px rgba(175, 16, 26, 0.4);
+        }
+        .btn-primary:active { transform: scale(0.98); }
+        
+        .btn-outline {
+            border: 1.5px solid #f1e4e3;
+            transition: all 0.2s ease;
+        }
+        .btn-outline:hover {
+            border-color: #af101a;
+            color: #af101a;
+            background: #ffffff;
+        }
+        
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding-top: 4rem;
+            }
+            .login-card { margin: 0 auto; }
+        }
+    </style>
+</head>
+<body class="selection:bg-primary/10">
+    <div class="bg-3d-wrap">
+        <div class="bg-3d-primitive sphere-1"></div>
+        <div class="bg-3d-primitive sphere-2"></div>
+        <div class="tactical-pane pane-1"></div>
+        <div class="tactical-pane pane-2"></div>
+    </div>
+
+    <!-- Navbar: Same as Dashboard -->
+    <header class="h-20 flex items-center px-8 glass-header sticky top-0 z-50">
+        <div class="flex-1">
+            <div class="text-2xl font-black tracking-tighter text-primary cursor-pointer active:scale-95 transition-transform inline-block" onclick="window.location.href='index.html'">ResQLink</div>
+        </div>
+        <div class="flex-1 flex justify-end items-center gap-4">
+            <div class="flex items-center gap-2 cursor-pointer group">
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface opacity-40 group-hover:opacity-100 transition-opacity">Protocol Help</span>
+                <div class="w-6 h-6 rounded-full border border-primary/10 flex items-center justify-center group-hover:border-primary/40 transition-colors">
+                    <span class="material-symbols-outlined text-[10px] text-primary">live_help</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container: Same max-width matching as Dashboard (max-w-7xl) -->
+    <main class="max-w-7xl mx-auto px-6 lg:px-12 py-12 lg:py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center hero-grid">
+            
+            <!-- Marketing Column -->
+            <div class="lg:col-span-6 space-y-12 animate-in slide-in-from-left duration-1000">
+                <div class="space-y-6">
+                    <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary block">Tactical Support</span>
+                    <h1 class="text-6xl md:text-7xl font-black tracking-tighter leading-[0.95]">
+                        Security is a<br/>
+                        <span class="text-primary italic">shared</span><br/>
+                        responsibility.
+                    </h1>
+                    <p class="text-lg font-medium text-on-surface-variant max-w-sm leading-relaxed opacity-70">
+                        Welcome back to the Command Center. Authenticate your node to access emergency synchronization systems.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-lg">
+                    <div class="premium-card p-6 flex flex-col gap-3">
+                        <span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+                        <h3 class="text-xs font-black uppercase tracking-widest text-on-surface">Encrypted Node</h3>
+                        <p class="text-[11px] font-bold text-on-surface-variant uppercase opacity-50">Protocols locked to terminal.</p>
+                    </div>
+                    <div class="premium-card p-6 flex flex-col gap-3">
+                        <span class="material-symbols-outlined text-red-400 text-3xl">dynamic_feed</span>
+                        <h3 class="text-xs font-black uppercase tracking-widest text-on-surface">Sync Active</h3>
+                        <p class="text-[11px] font-bold text-on-surface-variant uppercase opacity-50">Real-time telemetry link.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Card Column -->
+            <div class="lg:col-span-6 animate-in slide-in-from-right duration-1000">
+                <div class="premium-card p-10 md:p-14 lg:p-16 login-card">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-black tracking-tighter mb-2">Secure Login</h2>
+                        <p class="text-[10px] font-black text-on-surface-variant/40 uppercase tracking-[0.3em]">Operator identification required</p>
+                    </div>
+
+                    <form id="loginForm" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Portal Handle</label>
+                            <div class="input-pill flex items-center px-6 rounded-2xl h-14">
+                                <span class="material-symbols-outlined text-primary/20 mr-4">person</span>
+                                <input id="username" required type="text" class="w-full bg-transparent border-0 ring-0 focus:ring-0 font-bold p-0 placeholder:text-primary/10 text-sm" placeholder="Username"/>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40 ml-1">Access Key</label>
+                            <div class="input-pill flex items-center px-6 rounded-2xl h-14 relative">
+                                <span class="material-symbols-outlined text-primary/20 mr-4">key</span>
+                                <input id="password" required type="password" class="w-full bg-transparent border-0 ring-0 focus:ring-0 font-bold p-0 placeholder:text-primary/10 text-sm" placeholder="••••••••"/>
+                                <button type="button" onclick="togglePassword()" class="absolute right-6 group">
+                                    <span id="eyeIcon" class="material-symbols-outlined text-primary/20 group-hover:text-primary transition-colors">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 py-1">
+                            <input type="checkbox" id="remember" class="w-5 h-5 rounded border-primary/10 text-primary focus:ring-primary/10"/>
+                            <label for="remember" class="text-[10px] font-black text-on-surface-variant/30 uppercase tracking-widest cursor-pointer select-none">Maintain Session</label>
+                        </div>
+
+                        <button type="submit" id="loginBtn" class="w-full h-16 btn-primary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] flex items-center justify-center gap-3">
+                            Initialize Node
+                            <span class="material-symbols-outlined !text-[16px]">power_settings_new</span>
+                        </button>
+
+                        <div class="flex items-center gap-4 py-4">
+                            <div class="flex-1 h-px bg-primary/5"></div>
+                            <span class="text-[8px] font-black text-on-surface-variant/20 uppercase tracking-[0.5em]">Enrollment</span>
+                            <div class="flex-1 h-px bg-primary/5"></div>
+                        </div>
+
+                        <button type="button" onclick="window.location.href='register.html'" class="w-full h-16 btn-outline rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] flex items-center justify-center">
+                            Register New Node
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Steps: Matching the card style of dashboard -->
+    <section class="max-w-7xl mx-auto px-6 py-24 border-t border-primary/5">
+        <div class="mb-16">
+            <h2 class="text-4xl md:text-5xl font-black tracking-tighter mb-4">Onboarding Loop</h2>
+            <p class="text-on-surface-variant opacity-40 font-black uppercase tracking-[0.2em] text-[10px]">Zero-latency deployment in three stages.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="premium-card p-10 flex flex-col gap-6">
+                <div class="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1">fingerprint</span>
+                </div>
+                <div class="space-y-3">
+                    <span class="px-3 py-1 bg-primary text-white text-[9px] font-black rounded-full uppercase tracking-widest">Protocol 01</span>
+                    <h3 class="text-xl font-black tracking-tight">Identity Load</h3>
+                    <p class="text-xs font-semibold text-on-surface-variant opacity-60 leading-relaxed uppercase tracking-wider">Synchronize biometric and medical telemetry to the primary node.</p>
+                </div>
+            </div>
+
+            <div class="premium-card p-10 flex flex-col gap-6">
+                <div class="w-14 h-14 rounded-2xl bg-blue-500/5 flex items-center justify-center text-blue-500">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1">dynamic_form</span>
+                </div>
+                <div class="space-y-3">
+                    <span class="px-3 py-1 bg-blue-500 text-white text-[9px] font-black rounded-full uppercase tracking-widest">Protocol 02</span>
+                    <h3 class="text-xl font-black tracking-tight">Loop Expansion</h3>
+                    <p class="text-xs font-semibold text-on-surface-variant opacity-60 leading-relaxed uppercase tracking-wider">Establish high-priority links with trusted responder nodes.</p>
+                </div>
+            </div>
+
+            <div class="premium-card p-10 flex flex-col gap-6">
+                <div class="w-14 h-14 rounded-2xl bg-green-500/5 flex items-center justify-center text-green-500">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1">radar</span>
+                </div>
+                <div class="space-y-3">
+                    <span class="px-3 py-1 bg-green-500 text-white text-[9px] font-black rounded-full uppercase tracking-widest">Protocol 03</span>
+                    <h3 class="text-xl font-black tracking-tight">System Live</h3>
+                    <p class="text-xs font-semibold text-on-surface-variant opacity-60 leading-relaxed uppercase tracking-wider">Trigger immediate SOS bursts across the global responder network.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer: Shared style -->
+    <footer class="bg-[#271816] py-16 text-white">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row justify-between items-center gap-12">
+            <div class="text-[10px] font-black uppercase tracking-[0.4em] opacity-30">© 2026 ResQLink Tactical Systems. Secure Node Auth Active.</div>
+            <div class="flex flex-wrap justify-center gap-8">
+                <a href="#" class="text-[9px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Archive</a>
+                <a href="#" class="text-[9px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Privacy</a>
+                <a href="#" class="text-[9px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Protocols</a>
+                <a href="#" class="text-[9px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Node Help</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="immersive.js"></script>
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerText = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.innerText = 'visibility';
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerText = `INITIALIZING...`;
+            const res = await apiCall('/auth/login', 'POST', { username, password });
+            if (res.token) {
+                setSession(res.username, res.token, res.userId);
+                window.location.href = 'dashboard.html';
+            } else {
+                alert(res.message || 'Authentication failed');
+                btn.disabled = false;
+                btn.innerHTML = `Initialize Node <span class="material-symbols-outlined !text-[16px]">power_settings_new</span>`;
+            }
+        });
+    </script>
+</body>
+</html>
