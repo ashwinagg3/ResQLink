@@ -381,6 +381,97 @@ input:focus {
     font-weight: 500;
 }
 
-/* Utils */
 .hidden { display: none !important; }
 
+/* Responsive Adjustments for Mobile Readiness */
+@media (max-width: 768px) {
+    /* Container & Layout */
+    .container {
+        padding: 0 1rem;
+        margin: 2rem auto;
+    }
+
+    nav {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .nav-links {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Typography */
+    .hero h1 {
+        font-size: 3rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+
+    /* Buttons minimum touch target 44px */
+    button, 
+    .btn-cancel, 
+    .btn-confirm,
+    .submit-btn,
+    .logout-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* SOS Button adjustments - above fold & responsive */
+    .sos-container {
+        min-height: 40vh;
+        margin-top: 1rem;
+    }
+
+    .sos-btn {
+        width: min(250px, 70vw);
+        height: min(250px, 70vw);
+        font-size: 3rem;
+    }
+
+    /* Forms */
+    .auth-card {
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 100%;
+    }
+
+    /* Cards */
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal {
+        padding: 2rem;
+        width: 90%;
+    }
+
+    /* Tables (if dynamically added later) to stacked cards */
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+    }
+    thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    td { 
+        border: none;
+        border-bottom: 1px solid #eee; 
+        position: relative;
+        padding-left: 50%; 
+    }
+    td:before { 
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+    }
+}

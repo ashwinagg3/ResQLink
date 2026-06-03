@@ -73,8 +73,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Internal server error' });
 });
 
-// MongoDB Connection
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/emergency_contact_system';
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/emergency_contact_system';
 
 async function seedAdmin() {
     try {
@@ -105,6 +104,10 @@ async function connectDB() {
         console.log('Connected to local MongoDB');
         await seedAdmin();
     } catch (err) {
+        if (process.env.MONGODB_URI || process.env.NODE_ENV === 'production') {
+            console.error('Production MongoDB connection failed. Exiting to prevent data loss:', err);
+            process.exit(1);
+        }
         console.warn('Local MongoDB not available. Launching In-Memory Fallback Database...');
         try {
             const { MongoMemoryServer } = require('mongodb-memory-server');
