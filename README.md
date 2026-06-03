@@ -4,21 +4,43 @@
 
 Built with a focus on reliability, accessibility, and real-world usability, ResQLink bridges the gap between emergency situations and immediate communication.
 
+![Status](https://img.shields.io/badge/Status-Working-brightgreen)
+![Node.js](https://img.shields.io/badge/Backend-Node.js-green)
+![MongoDB](https://img.shields.io/badge/Database-MongoDB-darkgreen)
+![Express.js](https://img.shields.io/badge/Framework-Express.js-black)
+
+---
+
+## 🌐 Live Deployment
+
+Experience ResQLink in action:
+
+**🔗 Live Application:** `YOUR_DEPLOYMENT_LINK_HERE`
+
+> Note: SMS notifications depend on the configured SMS provider and available API credits.
+
+
+---
+
+## 🎥 Demo Video
+
+[▶️ Watch Full Demo](https://youtu.be/fG26f5-OScQ)
+
 ---
 
 ## ✨ Key Features
 
 ### 🆘 Smart SOS Alert System
 
-* One click emergency alert activation
+* One-click emergency alert activation
 * Automatic SMS notification dispatch
-* Real time location sharing through Google Maps links
+* Real-time location sharing through Google Maps links
 * Alert history tracking and logging
 
 ### 👥 Emergency Contact Management
 
-* Add, edit and remove emergency contacts
-* Unlimited personal emergency contacts
+* Add, edit, and remove emergency contacts
+* Personal emergency contact network
 * Dedicated contact management dashboard
 
 ### 📍 Live Location Sharing
@@ -67,7 +89,7 @@ SMS Notifications Sent
 Alert Stored in History
 ```
 
-Example SMS:
+### Example SMS
 
 ```text
 🚨 RESQLINK SOS ALERT
@@ -80,40 +102,27 @@ Map:
 https://maps.google.com/?q=latitude,longitude
 ```
 
-![ResQLink SOS Alert Proof](Proof.jpg)
+---
 
+## 📱 SMS Alert Proof
+
+<p align="center">
+  <img src="Proof.jpg" alt="ResQLink SOS Alert Proof" width="280">
+</p>
 
 ---
 
 ## 🛠 Tech Stack
 
-### Frontend
+**Frontend:** HTML5, CSS3, JavaScript, Tailwind CSS
 
-* HTML5
-* CSS3
-* JavaScript (Vanilla JS)
-* Tailwind CSS
+**Backend:** Node.js, Express.js
 
-### Backend
+**Database:** MongoDB, Mongoose
 
-* Node.js
-* Express.js
+**APIs & Services:** Notilify SMS API, Browser Geolocation API, Google Maps Location Links
 
-### Database
-
-* MongoDB
-* Mongoose
-
-### APIs & Services
-
-* Notilify SMS API
-* Browser Geolocation API
-* Google Maps Location Links
-
-### Authentication
-
-* Session-Based Authentication
-* Express Middleware
+**Authentication:** Session-Based Authentication, Express Middleware
 
 ---
 
@@ -134,6 +143,8 @@ ResQLink/
 │   ├── js/
 │   └── pages/
 │
+├── Proof.jpg
+│
 └── README.md
 ```
 
@@ -144,7 +155,7 @@ ResQLink/
 ### Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ashwinagg3/ResQLink.git
 cd ResQLink
 ```
 
