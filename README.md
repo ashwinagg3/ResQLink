@@ -4,11 +4,6 @@
 
 Built with a focus on reliability, accessibility, and real-world usability, ResQLink bridges the gap between emergency situations and immediate communication.
 
-![Status](https://img.shields.io/badge/Status-Working-brightgreen)
-![Node.js](https://img.shields.io/badge/Backend-Node.js-green)
-![MongoDB](https://img.shields.io/badge/Database-MongoDB-darkgreen)
-![Express.js](https://img.shields.io/badge/Framework-Express.js-black)
-
 ---
 
 ## 🌐 Live Deployment
