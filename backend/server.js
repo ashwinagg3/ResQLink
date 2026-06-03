@@ -42,7 +42,7 @@ app.use(generalLimiter);
 // Middleware
 app.use(cors());
 app.use(bodyParser.json({ limit: '1mb' }));
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 // Request Logger
 app.use((req, res, next) => {
@@ -62,7 +62,7 @@ app.use('/api/test-sms', testSmsRoutes);
 // Catch-all: serve index.html for SPA-style navigation
 app.use((req, res) => {
     if (!req.path.startsWith('/api')) {
-        res.sendFile(path.join(__dirname, '../frontend/index.html'));
+        res.sendFile(path.join(__dirname, 'frontend/index.html'));
     } else {
         res.status(404).json({ message: 'API node not found' });
     }
