@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 
 const authRoutes = require('./routes/auth');
 const contactRoutes = require('./routes/contacts');
@@ -40,9 +41,10 @@ const authLimiter = rateLimit({
 app.use(generalLimiter);
 
 // Middleware
+app.use(compression());
 app.use(cors());
 app.use(bodyParser.json({ limit: '1mb' }));
-app.use(express.static(path.join(__dirname, 'frontend')));
+app.use(express.static(path.join(__dirname, 'frontend'), { maxAge: '1d' }));
 
 // Request Logger
 app.use((req, res, next) => {

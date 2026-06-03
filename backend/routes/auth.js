@@ -140,7 +140,7 @@ router.put('/profile/:username', authenticateToken, async (req, res) => {
         const updatedUser = await User.findOneAndUpdate(
             { username: req.params.username.toLowerCase() },
             { $set: safeUpdates },
-            { new: true }
+            { returnDocument: 'after' }
         ).select('-password');
         
         if (!updatedUser) return res.status(404).json({ message: 'User not found' });

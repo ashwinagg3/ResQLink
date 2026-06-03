@@ -249,8 +249,16 @@
 
         // Initialize
         loadConversations();
-        setInterval(loadConversations, 5000); // Polling for new messages
-        setInterval(loadMessages, 3000);      // Polling for chat messages
+        function pollConversations() {
+            if (!document.hidden) loadConversations();
+            setTimeout(pollConversations, 10000);
+        }
+        function pollMessages() {
+            if (!document.hidden) loadMessages();
+            setTimeout(pollMessages, 5000);
+        }
+        setTimeout(pollConversations, 10000);
+        setTimeout(pollMessages, 5000);
     </script>
 </body>
 </html>

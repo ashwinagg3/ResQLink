@@ -19,7 +19,7 @@ router.post('/update', authenticateToken, async (req, res) => {
                 timestamp: new Date(),
                 username: req.user.username 
             },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
         );
         
         res.json(location);

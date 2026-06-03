@@ -852,7 +852,6 @@
                 `;
             }
             loadContacts();
-            syncFamily();
         }
 
         const mainBtn = document.getElementById('mainSOSBtn');
@@ -865,8 +864,16 @@
         initMap();
         loadDashboardData();
         syncFamily();  // immediate first call
-        setInterval(loadDashboardData, 10000);
-        setInterval(syncFamily, 2000);  // 2-second polling for near-real-time family tracking
+        function pollDashboardData() {
+            if (!document.hidden) loadDashboardData();
+            setTimeout(pollDashboardData, 15000);
+        }
+        function pollFamilySync() {
+            if (!document.hidden) syncFamily();
+            setTimeout(pollFamilySync, 5000);
+        }
+        setTimeout(pollDashboardData, 15000);
+        setTimeout(pollFamilySync, 5000);
     </script>
 </body>
 </html>
