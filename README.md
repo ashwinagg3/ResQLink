@@ -10,7 +10,7 @@ Built with a focus on reliability, accessibility, and real-world usability, ResQ
 
 Experience ResQLink in action:
 
-**🔗 Live Application:** https://resqlink-production-070f.up.railway.app/
+**🔗 Live Application:** https://resqlink-hgpo.onrender.com/
 
 > Note: SMS notifications depend on the configured SMS provider and available API credits.
 
